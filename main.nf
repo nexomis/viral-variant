@@ -58,24 +58,25 @@ include {VIRAL_VARIANT} from './modules/subworkflows/viral_variant/main.nf'
 
 
 workflow {
+
   inReads = Channel.of(
-    [ [id: 'sars_n4_PeAn', batch_id: 'clinic', rank_in_batch: 5], [file('data/test/private_inputs/reads/sars_n4_PeAn_R1_subset.fastq.gz'), file('data/test/private_inputs/reads/sars_n4_PeAn_R2_subset.fastq.gz')] ],
-    [ [id: 'sars_n6_XBB15', batch_id: 'batch1', rank_in_batch: 4], [file('data/test/private_inputs/reads/sars_n6_XBB15_R1_subset.fastq.gz'), file('data/test/private_inputs/reads/sars_n6_XBB15_R2_subset.fastq.gz')] ],
-    [ [id: 'sars_n2_FrLa', batch_id: 'clinic', rank_in_batch: 0], [file('data/test/private_inputs/reads/sars_n2_FrLa_R1_subset.fastq.gz'), file('data/test/private_inputs/reads/sars_n2_FrLa_R2_subset.fastq.gz')] ]
+    [ [id: 'P0', batch_id: 'batch1', rank_in_batch: 1], [file('data/test/input/reads/batch1/P0_R1.fq.gz'), file('data/test/input/reads/batch1/P0_R2.fq.gz')] ],
+    [ [id: 'P1', batch_id: 'batch1', rank_in_batch: 2], [file('data/test/input/reads/batch1/P1_R1.fq.gz'), file('data/test/input/reads/batch1/P1_R2.fq.gz')] ],
+    [ [id: 'P0', batch_id: 'batch2', rank_in_batch: 1], [file('data/test/input/reads/batch2/P0_R1.fq.gz'), file('data/test/input/reads/batch2/P0_R2.fq.gz')] ],
+    [ [id: 'P1', batch_id: 'batch2', rank_in_batch: 2], [file('data/test/input/reads/batch2/P1_R1.fq.gz'), file('data/test/input/reads/batch2/P1_R2.fq.gz')] ],
+    [ [id: 'P2', batch_id: 'batch2', rank_in_batch: 3], [file('data/test/input/reads/batch2/P1_R1.fq.gz'), file('data/test/input/reads/batch2/P1_R2.fq.gz')] ],
+    [ [id: 'P3', batch_id: 'batch2', rank_in_batch: 4], [file('data/test/input/reads/batch2/P1_R1.fq.gz'), file('data/test/input/reads/batch2/P1_R2.fq.gz')] ]
   )
-  //  [ [id: 'sars_n3_KeHe', batch_id: 'clinic', rank_in_batch: 2],['/mnt/d/viral_variant_test_dataset/inReads/sars_n3_KeHe_R1.fastq.gz', '/mnt/d/viral_variant_test_dataset/inReads/sars_n3_KeHe_R2.fastq.gz'] ]
-  //)
 
   inRef = Channel.of(
-    [ [id: 'batch1'], [file('data/test/private_inputs/ref/GCF_009858895.2_ASM985889v3_genomic.fna'), file('data/test/private_inputs/ref/GCF_009858895.2_ASM985889v3_genomic.gff')] ],
-    [ [id: 'clinic'], [file('data/test/private_inputs/ref/sars_assembled.fasta')] ]
+    [ [id: 'batch1'], [file('data/test/input/ref/random.fa')] ],
+    [ [id: 'batch2'], [file('data/test/input/ref/refseq.fa'), file('data/test/input/ref/refseq.gff')] ]
   )
-  //  [ [id: 'batch1'], ['https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/858/895/GCF_009858895.2_ASM985889v3/GCF_009858895.2_ASM985889v3_genomic.fna.gz', 'https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/858/895/GCF_009858895.2_ASM985889v3/GCF_009858895.2_ASM985889v3_genomic.gff.gz'] ],
 
   inAnnot = Channel.of(
-    [ [id: 'clinic'], [file('data/test/private_inputs/ref/GCF_009858895.2_ASM985889v3_genomic.fna'), file('data/test/private_inputs/ref/GCF_009858895.2_ASM985889v3_genomic.gff')] ]
+    [ [id: 'batch1'], [file('data/test/input/ref/refseq.fa'), file('data/test/input/ref/refseq.gff')] ]
   )
-  //  [ [id: 'clinic'], ['https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/858/895/GCF_009858895.2_ASM985889v3/GCF_009858895.2_ASM985889v3_genomic.fna.gz', 'https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/009/858/895/GCF_009858895.2_ASM985889v3/GCF_009858895.2_ASM985889v3_genomic.gff.gz'] ]
+
 
   VIRAL_VARIANT(inReads, inRef, inAnnot)
 
