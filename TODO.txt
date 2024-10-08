@@ -1,0 +1,16 @@
+TODO:
+    - input sample_sheet
+    - convert coord in final smpl and batch var_file to annot coord
+    - on final batch file: add depth for pos var at batch level but stable at 100% at smpl level (actually: empty + bamCov)
+    - management of option (var_depth_min, var_best_prop_min, var_mpileup_subset, abra2_mapq)
+    - filter smpl and batch ivar_file with min abundance (?)
+    - bwa-mem instead of bowtie2_local
+    - PSA: recalibrate PSA to non avoid to start by gaps
+    - PSA: management of multi fasta
+    - include public data set test
+    - perform ABRA2 at batch level: management of workflow ([smpl -> batch] => [smpl -> batch -> smpl -> batch]), of bam out name (list of meta_id on meta ?) and of meta.type sample dependant.
+    - version of sub_worflow wihout anny "Annot" in input
+    - sumarize stats: % similarity PSA, % map, nb bases var (union & intersect)
+    - VIZ: plot of variant
+    - ABRA2 process: if meta.type not defined, the data will be considered as PE (and not SE), keep as is or extract the information from the bam?
+    
