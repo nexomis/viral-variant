@@ -5,6 +5,7 @@ TODO:
     - management of option (var_depth_min, var_best_prop_min, var_mpileup_subset, abra2_mapq)
     - filter smpl and batch ivar_file with min abundance (?)
     - bwa-mem instead of bowtie2_local
+    - mapping only of a subset of reads ? in accord with '-d' parameters of 'samtools mpileup'
     - PSA: recalibrate PSA to non avoid to start by gaps
     - PSA: management of multi fasta
     - include public data set test

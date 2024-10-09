@@ -6,15 +6,25 @@
     "type": "object",
     "definitions": {
         "input_output_options": {
-            "title": "Input/output options",
+            "title": "input/output",
             "type": "object",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": ["out_dir"],
             "properties": {
+                "save_fastp": {
+                    "type": "boolean",
+                    "description": "Save fastp trimmed fastq.",
+                    "default": false
+                },
+                "save_bam_after_indel_realn": {
+                    "type": "boolean",
+                    "description": "Save mapping files after indels realignement.",
+                    "default": false
+                },
                 "out_dir": {
                     "type": "string",
                     "format": "directory-path",
-                    "description": "The output directory where the results will be saved.",
+                    "exists": false,
+                    "description": "The output directory where the results will be saved (must not already exist).",
                     "default": "out_dir"
                 },
                 "publish_dir_mode": {
@@ -24,11 +34,119 @@
                 }
             }
         },
+        "global_workflow": {
+            "title": "global workflow",
+            "type": "object",
+            "description": "Options for global worflow",
+            "properties": {
+                "biocontainers_registry": {
+                    "type": "string",
+                    "default": "quay.io",
+                    "description": "Biocontaners registry of docker images. Note: Does not applied to every containers process"
+                },
+                "skip_primary": {
+                    "type": "boolean",
+                    "description": "Skip primary analysis",
+                    "default": true
+                }
+            }
+        },
+        "fastp_options": {
+            "title": "fastp (primary analysis)",
+            "type": "object",
+            "description": "Options for the fastp software.",
+            "properties": {
+                "trim_poly_g": {
+                    "type": "boolean",
+                    "description": "Enable polyG tail trimming.",
+                    "default": true
+                },
+                "trim_poly_x": {
+                    "type": "boolean",
+                    "description": "Enable polyX tail trimming.",
+                    "default": true
+                },
+                "min_avg_qual": {
+                    "type": "integer",
+                    "description": "Minimum average quality to keep a read.",
+                    "default": 28
+                },
+                "min_len": {
+                    "type": "integer",
+                    "description": "Minimum length to keep a read.",
+                    "default": 41
+                },
+                "cut_right_window_size": {
+                    "type": "integer",
+                    "description": "The window size for sliding window trimming on the right.",
+                    "default": 4
+                },
+                "cut_right_mean_qual": {
+                    "type": "integer",
+                    "description": "The mean quality requirement for sliding window trimming on the right.",
+                    "default": 20
+                },
+                "cut_tail_window_size": {
+                    "type": "integer",
+                    "description": "The window size for sliding window trimming on the tail.",
+                    "default": 4
+                },
+                "cut_tail_mean_qual": {
+                    "type": "integer",
+                    "description": "The mean quality requirement for sliding window trimming on the tail.",
+                    "default": 25
+                }
+            }
+        },
+        "primary_opts": {
+            "title": "primary analysis",
+            "type": "object",
+            "description": "Options for Primary analysis",
+            "properties": {
+                "kraken2_db": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "exists": true, 
+                    "description": "Kraken2 index as a directory"
+                },
+                "num_reads_sample_qc": {
+                    "type": "integer",
+                    "default": 250000,
+                    "description": "Number of reads to subsample before kraken2 and fastqc"
+                }
+            }
+        },
+        "variant_calling": {
+            "title": "Variant calling",
+            "type": "object",
+            "description": "Options for variant calling of interest genome",
+            "properties": {
+                "args_bowtie2": {
+                    "type": "string",
+                    "default": "--local",
+                    "description": "Bowtie2 mapping args. Note: except in special cases, it is generally not advisable to perform mapping on 'end-to-end' mode."
+                },
+                "args_samtools_mpileup_variant": {
+                    "type": "string",
+                    "default": "-d 10000",
+                    "description": "'samtools mpileup' args for variant calling. Options already included and cannot be amended '-aa -A -B -Q 0'"
+                },
+                "min_dp_variant": {
+                    "type": "integer",
+                    "default": 30,
+                    "description": "Minimum depth threshold for a position to be included in the filtered file of detected variants."
+                },
+                "ref_ratio_threshold_variant": {
+                    "type": "number",
+                    "default": 0.9,
+                    "description": "Ratio threshold of reference allele representation below which the position can be included in the filtered file of detected variants."
+                }
+            }
+        },
         "resources_options": {
             "title": "Resources options",
             "type": "object",
             "description": "Define The default resources for nextflow",
-            "required": ["input_dir", "out_dir"],
             "properties": {
                 "ncpus_low": {
                     "type": "integer",
@@ -44,16 +162,41 @@
                     "type": "integer",
                     "default": 16,
                     "description": "Number of cpu for high process."
+                },
+                "mem_low": {
+                    "type": "integer",
+                    "default": 15,
+                    "description": "Memory for low process."
+                },
+                "mem_med": {
+                    "type": "integer",
+                    "default": 30,
+                    "description": "Memory for mid process."
+                },
+                "mem_high": {
+                    "type": "integer",
+                    "default": 120,
+                    "description": "Memory for high process.."
+                },
+                "kraken2_memory": {
+                    "type": "integer",
+                    "default": 10,
+                    "description": "Amount of memory in GB for Kraken2, default is 12 GB."
+                },
+                "kraken2_cpus": {
+                    "type": "integer",
+                    "default": 4,
+                    "description": "Amount of CPUs for kraken2"
                 }
             }
         }
     },
     "allOf": [
-        {
-            "$ref": "#/definitions/input_output_options"
-        },
-        {
-            "$ref": "#/definitions/resources_options"
-        }
+        { "$ref": "#/definitions/input_output_options" },
+        { "$ref": "#/definitions/global_workflow" },
+        { "$ref": "#/definitions/fastp_options" },
+        { "$ref": "#/definitions/primary_opts" },
+        { "$ref": "#/definitions/variant_calling" },
+        { "$ref": "#/definitions/resources_options" }
     ]
 }
