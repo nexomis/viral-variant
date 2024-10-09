@@ -60,12 +60,12 @@ include {VIRAL_VARIANT} from './modules/subworkflows/viral_variant/main.nf'
 workflow {
 
   inReads = Channel.of(
-    [ [id: 'P0', batch_id: 'batch1', rank_in_batch: 1], [file('data/test/input/reads/batch1/P0_R1.fq.gz'), file('data/test/input/reads/batch1/P0_R2.fq.gz')] ],
-    [ [id: 'P1', batch_id: 'batch1', rank_in_batch: 2], [file('data/test/input/reads/batch1/P1_R1.fq.gz'), file('data/test/input/reads/batch1/P1_R2.fq.gz')] ],
-    [ [id: 'P0', batch_id: 'batch2', rank_in_batch: 1], [file('data/test/input/reads/batch2/P0_R1.fq.gz'), file('data/test/input/reads/batch2/P0_R2.fq.gz')] ],
-    [ [id: 'P1', batch_id: 'batch2', rank_in_batch: 2], [file('data/test/input/reads/batch2/P1_R1.fq.gz'), file('data/test/input/reads/batch2/P1_R2.fq.gz')] ],
-    [ [id: 'P2', batch_id: 'batch2', rank_in_batch: 3], [file('data/test/input/reads/batch2/P1_R1.fq.gz'), file('data/test/input/reads/batch2/P1_R2.fq.gz')] ],
-    [ [id: 'P3', batch_id: 'batch2', rank_in_batch: 4], [file('data/test/input/reads/batch2/P1_R1.fq.gz'), file('data/test/input/reads/batch2/P1_R2.fq.gz')] ]
+    [ [id: 'b1_P0', batch_id: 'batch1', rank_in_batch: 1], [file('data/test/input/reads/batch1/P0_R1.fq.gz'), file('data/test/input/reads/batch1/P0_R2.fq.gz')] ],
+    [ [id: 'b1_P1', batch_id: 'batch1', rank_in_batch: 2], [file('data/test/input/reads/batch1/P1_R1.fq.gz'), file('data/test/input/reads/batch1/P1_R2.fq.gz')] ],
+    [ [id: 'b2_P0', batch_id: 'batch2', rank_in_batch: 1], [file('data/test/input/reads/batch2/P0_R1.fq.gz'), file('data/test/input/reads/batch2/P0_R2.fq.gz')] ],
+    [ [id: 'b2_P1', batch_id: 'batch2', rank_in_batch: 2], [file('data/test/input/reads/batch2/P1_R1.fq.gz'), file('data/test/input/reads/batch2/P1_R2.fq.gz')] ],
+    [ [id: 'b2_P2', batch_id: 'batch2', rank_in_batch: 3], [file('data/test/input/reads/batch2/P1_R1.fq.gz'), file('data/test/input/reads/batch2/P1_R2.fq.gz')] ],
+    [ [id: 'b2_P3', batch_id: 'batch2', rank_in_batch: 4], [file('data/test/input/reads/batch2/P1_R1.fq.gz'), file('data/test/input/reads/batch2/P1_R2.fq.gz')] ]
   )
 
   inRef = Channel.of(
@@ -81,18 +81,19 @@ workflow {
   VIRAL_VARIANT(inReads, inRef, inAnnot)
 
   publish:
-  VIRAL_VARIANT.out.var_by_batch >> 'var_by_batch'  
-  VIRAL_VARIANT.out.var_by_smpl_raw >> 'var_by_smpl_raw'                        //
-  VIRAL_VARIANT.out.subset_cov >> 'subset_cov'                                  //
-  VIRAL_VARIANT.out.var_by_smpl_filter >> 'var_by_smpl_filter'                  //
-  VIRAL_VARIANT.out.var_by_batch_ind_smpl_file >> 'var_by_batch_ind_smpl_file'
+  VIRAL_VARIANT.out.summary_var_by_batch >> 'summary_var_by_batch'
+  VIRAL_VARIANT.out.var_batch_filtered >> 'var_batch_filtered'             //
+  VIRAL_VARIANT.out.var_by_smpl_filtered >> 'var_by_smpl_filtered'
+  VIRAL_VARIANT.out.var_by_smpl_corrected >> 'var_by_smpl_corrected'
+  VIRAL_VARIANT.out.subset_mpileup_cov_by_smpl >> 'subset_mpileup_cov_by_smpl'     //
   VIRAL_VARIANT.out.transfered_gff >> 'transfered_gff'
-  VIRAL_VARIANT.out.psa_algn >> 'psa_algn'                                      //
-  VIRAL_VARIANT.out.psa_genomic_coords >> 'psa_genomic_coords'                  //
+  VIRAL_VARIANT.out.psa_algn >> 'psa_algn'                        //
+  VIRAL_VARIANT.out.psa_genomic_coords >> 'psa_genomic_coords'   //
   VIRAL_VARIANT.out.flagstat >> 'flagstat'
   // bam in option: save_bam ?
 
 }
+
 
 
 output {

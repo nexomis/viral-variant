@@ -14,4 +14,7 @@ TODO:
     - VIZ: plot of variant
     - ABRA2 process: if meta.type not defined, the data will be considered as PE (and not SE), keep as is or extract the information from the bam?
     - if meta.rank_in_batch missing, implement with line number in csv (logic only if is missing for all sample of batch, but not really important)
+
+
+*ok? 'FILTER_REGROUP_IVAR_VARIANTS' relation between both fils list based on file basename, same think between both templated scripts*
     
