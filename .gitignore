@@ -1,8 +1,8 @@
-data/test/private_inputs
+/data/test/input/
+/data/local_test/
 /work
 .nextflow*
-/data/test/out_dir
 /out_dir
 /.nextflow
-ignore_catch/
-test/
+/ignore_catch
+/test
