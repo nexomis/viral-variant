@@ -1,0 +1,3 @@
+id,fasta,annotation,annotation_reference
+batch1,data/test/input/ref/random.fa,data/test/input/ref/refseq.gff,data/test/input/ref/refseq.fa
+batch2,data/test/input/ref/refseq.fa,data/test/input/ref/refseq.gff,

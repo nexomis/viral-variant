@@ -8,8 +8,25 @@
         "input_output_options": {
             "title": "input/output",
             "type": "object",
+            "required": ["input", "refs", "out_dir"],
             "description": "Define where the pipeline should find input data and save output data.",
             "properties": {
+                "input": {
+                    "type": "string",
+                    "format": "file-path",
+                    "mimetype": "text/csv",
+                    "pattern": ".csv$",
+                    "schema": "assets/input_schema.json",
+                    "description": "Path to comma-separated file containing information about the samples you would like to analyse."
+                },
+                "refs": {
+                    "type": "string",
+                    "format": "file-path",
+                    "mimetype": "text/csv",
+                    "pattern": ".csv$",
+                    "schema": "assets/refs_schema.json",
+                    "description": "Path to comma-separated file containing information about the references to be used for each batch"
+                },
                 "save_fastp": {
                     "type": "boolean",
                     "description": "Save fastp trimmed fastq.",
@@ -42,7 +59,7 @@
                 "biocontainers_registry": {
                     "type": "string",
                     "default": "quay.io",
-                    "description": "Biocontaners registry of docker images. Note: Does not applied to every containers process"
+                    "description": "Biocontainers registry of docker images. Note: Does not applied to every containers process"
                 },
                 "skip_primary": {
                     "type": "boolean",

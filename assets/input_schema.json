@@ -1,0 +1,52 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "https://raw.githubusercontent.com/nexomis/viral-variant/main/assets/input_schema.json",
+    "title": "Sample sheet format for --input",
+    "description": "Sample ids with reads paths and metadata",
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_]+$",
+          "uniqueItems": true,
+          "description": "Sample unique IDs (alphanum or _)"
+        },
+        "R1": {
+          "type": "string",
+          "pattern": "^\\S+\\.(fastq|fq|spring)(\\.)?(gz|z|)?$",
+          "format": "file-path",
+          "description": "Path for R1 reads with (.fastq, .fq), can be gziped. Spring files accepted."
+        },
+        "R2": {
+          "description": "Path for R2 reads with (.fastq, .fq), can be gziped.",
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^\\S+\\.(fastq|fq)(\\.)?(gz|z|gzip)?$",
+              "format": "file-path"
+            },
+            {
+              "type": "string",
+              "maxLength": 0
+            }
+          ],
+          "default": ""
+        },
+        "batch_id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_]*$", 
+          "description": "Batch id to analyses samples alltogether",
+          "default": ""
+        },
+        "rank_in_batch": {
+          "type": "number",
+          "description": "Rank in batch to follow the pasages order",
+          "default": ""
+        }
+      },
+      "required": ["id", "R1", "batch_id", "rank_in_batch"]
+    }
+  }
+

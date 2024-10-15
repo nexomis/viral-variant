@@ -1,0 +1,56 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "https://raw.githubusercontent.com/nexomis/viral-variant/main/assets/refs_schema.json",
+    "title": "Sample sheet format for --refs",
+    "description": "Sample ids with reads paths and metadata",
+    "type": "array",
+    "items": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_]+$",
+          "uniqueItems": true,
+          "description": "Sample unique IDs (alphanum or _)"
+        },
+        "fasta": {
+          "type": "string",
+          "pattern": "^\\S+\\.(fasta|fa|fna)(\\.)?(gz|z|)?$",
+          "format": "file-path",
+          "description": "Path for the reference to be used for mapping."
+        },
+        "annotation": {
+          "description": "Path for the annotation file (optional).",
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^\\S+\\.(gff)(\\.)?(gz|z|gzip)?$",
+              "format": "file-path"
+            },
+            {
+              "type": "string",
+              "maxLength": 0
+            }
+          ],
+          "default": ""
+        },
+        "annotation_reference": {
+            "description": "Path for an alternative reference from which the annotation is based (optional).",
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^\\S+\\.(fasta|fa|fna)(\\.)?(gz|z|)?$",
+                "format": "file-path"
+              },
+              {
+                "type": "string",
+                "maxLength": 0
+              }
+            ],
+            "default": ""
+        }
+      },
+      "required": ["id", "fasta", "annotation"]
+    }
+  }
+

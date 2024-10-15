@@ -35,7 +35,9 @@ mv genvar/batch2/*.csv expected_results/batch2/
 
 rm -rf genvar/
 
+wget https://raw.githubusercontent.com/nexomis/db-kraken2-custom/refs/heads/main/build_custom_db.sh
+bash build_custom_db.sh -i GCF_002815375.1 -n ASM281537v1 -j 162145 -o k2test
 
 ## RUN
-cd ../../../
-NXF_VER='24.04.4' nextflow run main.nf -profile docker --ref_ratio_threshold_variant 0.95
+#cd ../../../
+#NXF_VER='24.04.4' nextflow run main.nf -profile docker --ref_ratio_threshold_variant 0.95

@@ -19,7 +19,8 @@ log.info """
 
 if (params.help) {
   log.info paramsHelp("nextflow run nexomis/viral-variant --input </path/to/samplesheet> [args]")
-//  log.info showSchemaHelp("assets/input_schema.json")
+  log.info showSchemaHelp("assets/input_schema.json")
+  log.info showSchemaHelp("assets/refs_schema.json")
 //  log.info showSchemaHelp("assets/ref_genomes_schema.json")
   exit 0
 }
@@ -42,41 +43,49 @@ def parse_sample_entry(it) {
   meta = [
     "id": it[0],
     "read_type": type,
-    "do_primary": it[3],
-    "batch_id": it[4],
-    "rank_in_batch": it[5],
-    "ref_id": it[6],
-    "annot_id": (it[7] && !it[7].isEmpty() ) ? it[7] : null
+    "batch_id": it[3],
+    "rank_in_batch": it[4]
   ]
   return [meta, files]
 }
   
 // include
-include {PRIMARY_FROM_READS} from './modules/subworkflows/primary/from_reads/main.nf'
+include {PRIMARY} from './modules/subworkflows/primary/main.nf'
 include {VIRAL_VARIANT} from './modules/subworkflows/viral_variant/main.nf'
-
-
 
 workflow {
 
-  inReads = Channel.of(
-    [ [id: 'b1_P0', batch_id: 'batch1', rank_in_batch: 1], [file('data/test/input/reads/batch1/P0_R1.fq.gz'), file('data/test/input/reads/batch1/P0_R2.fq.gz')] ],
-    [ [id: 'b1_P1', batch_id: 'batch1', rank_in_batch: 2], [file('data/test/input/reads/batch1/P1_R1.fq.gz'), file('data/test/input/reads/batch1/P1_R2.fq.gz')] ],
-    [ [id: 'b2_P0', batch_id: 'batch2', rank_in_batch: 1], [file('data/test/input/reads/batch2/P0_R1.fq.gz'), file('data/test/input/reads/batch2/P0_R2.fq.gz')] ],
-    [ [id: 'b2_P1', batch_id: 'batch2', rank_in_batch: 2], [file('data/test/input/reads/batch2/P1_R1.fq.gz'), file('data/test/input/reads/batch2/P1_R2.fq.gz')] ],
-    [ [id: 'b2_P2', batch_id: 'batch2', rank_in_batch: 3], [file('data/test/input/reads/batch2/P1_R1.fq.gz'), file('data/test/input/reads/batch2/P1_R2.fq.gz')] ],
-    [ [id: 'b2_P3', batch_id: 'batch2', rank_in_batch: 4], [file('data/test/input/reads/batch2/P1_R1.fq.gz'), file('data/test/input/reads/batch2/P1_R2.fq.gz')] ]
-  )
+  Channel.fromSamplesheet("input")
+  | map {
+    return parse_sample_entry(it)
+  }
+  | set { parsedInputs }
 
-  inRef = Channel.of(
-    [ [id: 'batch1'], [file('data/test/input/ref/random.fa')] ],
-    [ [id: 'batch2'], [file('data/test/input/ref/refseq.fa'), file('data/test/input/ref/refseq.gff')] ]
-  )
+  if (params.skip_primary) {
+    inReads = parsedInputs
+  } else {
+    if ( params.kraken2_db == null ) {
+      error "kraken2_db argument required for primary analysis"
+    }
 
-  inAnnot = Channel.of(
-    [ [id: 'batch1'], [file('data/test/input/ref/refseq.fa'), file('data/test/input/ref/refseq.gff')] ]
-  )
+    Channel.fromPath(params.kraken2_db, type: "dir", checkIfExists: true)
+    | map {[["id": "kraken_db"], it]}
+    | collect
+    | set {dbPathKraken2}
 
+    taxDir = Channel.fromPath(params.tax_dir, type: 'dir')
+
+    numReads = Channel.value(params.num_reads_sample_qc)
+    
+    PRIMARY(parsedInputs, dbPathKraken2, taxDir, numReads)
+    PRIMARY.out.trimmed
+    | set { inReads }
+  }
+
+  inputRefs = Channel.fromSamplesheet("refs")
+
+  inRef = inputRefs.map {[[id: it[0]], it[3] == "" ? [file(it[1]), file(it[2])] : [file(it[1])]]}
+  inAnnot = inputRefs.filter{it[3] != ""}.map{[[id: it[0]],[file(it[3]), file(it[2])]]}
 
   VIRAL_VARIANT(inReads, inRef, inAnnot)
 
@@ -90,14 +99,14 @@ workflow {
   VIRAL_VARIANT.out.psa_algn >> 'psa_algn'                        //
   VIRAL_VARIANT.out.psa_genomic_coords >> 'psa_genomic_coords'   //
   VIRAL_VARIANT.out.flagstat >> 'flagstat'
+  VIRAL_VARIANT.out.aln_bam >> 'aln'
   // bam in option: save_bam ?
 
 }
 
-
-
 output {
-  directory 'out_dir'
-  mode 'rellink'
+  directory "$params.out_dir"
+  mode "$params.publish_dir_mode"
 }
+
 

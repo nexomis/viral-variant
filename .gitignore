@@ -1,4 +1,5 @@
 /data/test/input/
+/data/test/out_dir/
 /data/local_test/
 /work
 .nextflow*
@@ -6,3 +7,7 @@
 /.nextflow
 /ignore_catch
 /test
+comparison_results.csv
+raw.txt
+/data/test/build_custom_db.sh
+/data/test/k2*

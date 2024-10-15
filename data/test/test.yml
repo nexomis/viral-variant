@@ -1,0 +1,7 @@
+input: data/test/samplesheets.csv
+refs: data/test/refs.csv
+mem_high: 30
+ref_ratio_threshold_variant: 0.95
+out_dir: data/test/out_dir
+skip_primary: false
+kraken2_db: data/test/k2test

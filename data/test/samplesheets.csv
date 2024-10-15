@@ -1,0 +1,7 @@
+id,batch_id,rank_in_batch,R1,R2
+b1_P0,batch1,1,data/test/input/reads/batch1/P0_R1.fq.gz,data/test/input/reads/batch1/P0_R2.fq.gz
+b1_P1,batch1,2,data/test/input/reads/batch1/P1_R1.fq.gz,data/test/input/reads/batch1/P1_R2.fq.gz
+b2_P0,batch2,1,data/test/input/reads/batch2/P0_R1.fq.gz,data/test/input/reads/batch2/P0_R2.fq.gz
+b2_P1,batch2,2,data/test/input/reads/batch2/P1_R1.fq.gz,data/test/input/reads/batch2/P1_R2.fq.gz
+b2_P2,batch2,3,data/test/input/reads/batch2/P2_R1.fq.gz,data/test/input/reads/batch2/P2_R2.fq.gz
+b2_P3,batch2,4,data/test/input/reads/batch2/P3_R1.fq.gz,data/test/input/reads/batch2/P3_R2.fq.gz
