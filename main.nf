@@ -91,6 +91,7 @@ workflow {
 
   publish:
   VIRAL_VARIANT.out.summary_var_by_batch >> 'summary_var_by_batch'
+  VIRAL_VARIANT.out.summary_var_by_batch_long_frmt >> 'summary_var_by_batch_long_frmt'
   VIRAL_VARIANT.out.var_batch_filtered >> 'var_batch_filtered'             //
   VIRAL_VARIANT.out.var_by_smpl_filtered >> 'var_by_smpl_filtered'
   VIRAL_VARIANT.out.var_by_smpl_corrected >> 'var_by_smpl_corrected'
