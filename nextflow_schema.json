@@ -126,6 +126,12 @@
                     "exists": true, 
                     "description": "Kraken2 index as a directory"
                 },
+                "tax_dir": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "description": "Path to a custom taxonomy directory for recentrifuge.",
+                    "default": "${projectDir}/modules/subworkflows/primary/taxdump_26092024"
+                },
                 "num_reads_sample_qc": {
                     "type": "integer",
                     "default": 250000,
