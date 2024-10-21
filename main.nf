@@ -90,19 +90,13 @@ workflow {
   VIRAL_VARIANT(inReads, inRef, inAnnot)
 
   publish:
-  VIRAL_VARIANT.out.summary_var_by_batch >> 'summary_var_by_batch'
-  VIRAL_VARIANT.out.summary_var_by_batch_long_frmt >> 'summary_var_by_batch_long_frmt'
-  VIRAL_VARIANT.out.var_batch_filtered >> 'var_batch_filtered'             //
-  VIRAL_VARIANT.out.var_by_smpl_filtered >> 'var_by_smpl_filtered'
-  VIRAL_VARIANT.out.var_by_smpl_corrected >> 'var_by_smpl_corrected'
-  VIRAL_VARIANT.out.subset_mpileup_cov_by_smpl >> 'subset_mpileup_cov_by_smpl'     //
-  VIRAL_VARIANT.out.transfered_gff >> 'transfered_gff'
-  VIRAL_VARIANT.out.psa_algn >> 'psa_algn'                        //
-  VIRAL_VARIANT.out.psa_genomic_coords >> 'psa_genomic_coords'   //
-  VIRAL_VARIANT.out.flagstat >> 'flagstat'
-  VIRAL_VARIANT.out.aln_bam >> 'aln'
-  // bam in option: save_bam ?
-
+  VIRAL_VARIANT.out.summary_var_by_batch >> 'summary_var_by_batch/global'
+  VIRAL_VARIANT.out.summary_var_by_batch_light >> 'summary_var_by_batch/light'
+  VIRAL_VARIANT.out.summary_var_by_batch_long_frmt >> 'summary_var_by_batch/long_frmt'
+  VIRAL_VARIANT.out.transfered_gff >> 'transfered_annot'
+  VIRAL_VARIANT.out.psa_algn >> 'transfered_annot'
+  VIRAL_VARIANT.out.flagstat >> 'mapping/flagstat'
+  VIRAL_VARIANT.out.aln_bam >> 'mapping'
 }
 
 output {
