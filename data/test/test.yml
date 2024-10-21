@@ -1,9 +1,8 @@
 input: data/test/samplesheets.csv
 refs: data/test/refs.csv
-mem_high: 14
-mem_med: 14
-ncpus_high: 7
+mem_high: 30
 ref_ratio_threshold_variant: 0.95
-alt_ratio_threshold_variant: 0.3
+alt_ratio_threshold_variant: 0.01
 out_dir: data/test/out_dir
-skip_primary: true
+skip_primary: false
+kraken2_db: data/test/k2test
