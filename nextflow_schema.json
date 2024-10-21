@@ -157,6 +157,11 @@
                     "type": "number",
                     "default": 0.9,
                     "description": "Ratio threshold of reference allele representation below which the position can be included in the filtered file of detected variants."
+                },
+                "alt_ratio_threshold_variant": {
+                    "type": "number",
+                    "default": 0.0,
+                    "description": "Ratio threshold of alternate allele representation about which the position can be included in the filtered file of detected variants.  Note: an SNV will only be considered as passing the filters if it validates all the criteria (e.g. with parameters set to 'alt_ratio_threshold_variant=0.01' and 'ref_ratio_threshold_variant=0.95' a position that would have, for example, 'REF_FREQ=0.94' with 10 alternative alleles of the same frequency (< 0.01) would not pass the filters). By default the value is set to '0.0' in order to privilege the reference allele ratio criteria, but it is recommended to at least set this threshold a little higher than the probability of error (obtained with 'samtools stats' or estimated according to the average QScore of the bases/reads (for example double of probability corresponding to the average QScore, which gives '0.002' for Q30)."
                 }
             }
         },
