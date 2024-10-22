@@ -144,10 +144,20 @@
             "type": "object",
             "description": "Options for variant calling of interest genome",
             "properties": {
+                "mapper": {
+                    "type": "string",
+                    "default": "bwa-mem",
+                    "description": "Mapping tools. Available: 'bowtie2', 'bwa-mem'."
+                },
+                "args_bwamem": {
+                    "type": "string",
+                    "default": "-M",
+                    "description": "BWA-mem mapping args. Ignored if 'mapper' is not 'bwa-mem'. Default is '-M' in order to ensure Picard MarkDuplicates compatibility (force single primary alignment by reads, even if reads are splited and map independantly ; probably not ideal in all context)."
+                },
                 "args_bowtie2": {
                     "type": "string",
                     "default": "--local",
-                    "description": "Bowtie2 mapping args. Note: except in special cases, it is generally not advisable to perform mapping on 'end-to-end' mode."
+                    "description": "Bowtie2 mapping args. Ignored if 'mapper' is not 'bowtie2'."
                 },
                 "args_samtools_mpileup_variant": {
                     "type": "string",

@@ -87,7 +87,7 @@ workflow {
   inRef = inputRefs.map {[[id: it[0]], it[3] == "" ? [file(it[1]), file(it[2])] : [file(it[1])]]}
   inAnnot = inputRefs.filter{it[3] != ""}.map{[[id: it[0]],[file(it[3]), file(it[2])]]}
 
-  VIRAL_VARIANT(inReads, inRef, inAnnot)
+  VIRAL_VARIANT(inReads, inRef, inAnnot, params.mapper)
 
   publish:
   VIRAL_VARIANT.out.summary_var_by_batch >> 'summary_var_by_batch/global'
