@@ -87,12 +87,17 @@ workflow {
   inRef = inputRefs.map {[[id: it[0]], it[3] == "" ? [file(it[1]), file(it[2])] : [file(it[1])]]}
   inAnnot = inputRefs.filter{it[3] != ""}.map{[[id: it[0]],[file(it[3]), file(it[2])]]}
 
-  VIRAL_VARIANT(inReads, inRef, inAnnot, params.mapper)
-
+  VIRAL_VARIANT(inReads, inRef, inAnnot, params.mapper, params.var_caller)
+  
   publish:
-  VIRAL_VARIANT.out.summary_var_by_batch >> 'summary_var_by_batch/global'
-  VIRAL_VARIANT.out.summary_var_by_batch_light >> 'summary_var_by_batch/light'
-  VIRAL_VARIANT.out.summary_var_by_batch_long_frmt >> 'summary_var_by_batch/long_frmt'
+  VIRAL_VARIANT.out.sav_call_snv >> 'sav_call/snv'
+  VIRAL_VARIANT.out.sav_call_snv_rev >> 'sav_call/details'
+  VIRAL_VARIANT.out.sav_call_snv_fwd >> 'sav_call/details'
+  VIRAL_VARIANT.out.sav_call_snv_indel >> 'sav_call/details'
+  VIRAL_VARIANT.out.sav_call_snv_base >> 'sav_call/details'
+  VIRAL_VARIANT.out.summary_ivar_by_batch >> 'summary_ivar_by_batch/global'
+  VIRAL_VARIANT.out.summary_ivar_by_batch_light >> 'summary_ivar_by_batch/light'
+  VIRAL_VARIANT.out.summary_ivar_by_batch_long_frmt >> 'summary_ivar_by_batch/long_frmt'
   VIRAL_VARIANT.out.transfered_gff >> 'transfered_annot'
   VIRAL_VARIANT.out.psa_algn >> 'transfered_annot'
   VIRAL_VARIANT.out.flagstat >> 'mapping/flagstat'
@@ -103,5 +108,4 @@ output {
   directory "$params.out_dir"
   mode "$params.publish_dir_mode"
 }
-
 

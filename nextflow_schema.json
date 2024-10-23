@@ -159,25 +159,35 @@
                     "default": "--local",
                     "description": "Bowtie2 mapping args. Ignored if 'mapper' is not 'bowtie2'."
                 },
-                "args_samtools_mpileup_variant": {
+                "var_caller": {
                     "type": "string",
-                    "default": "-d 10000",
-                    "description": "'samtools mpileup' args for variant calling. Options already included and cannot be amended '-aa -A -B -Q 0'"
+                    "default": "sav_call,ivar",
+                    "description": "Mapping tools. Available: 'sav_call' and/or 'ivar'."
+                },
+                "max_n_pileup": {
+                    "type": "integer",
+                    "default": 1000000,
+                    "description": "Maximum reads in pileup."
                 },
                 "min_dp_variant": {
                     "type": "integer",
-                    "default": 30,
+                    "default": 20,
                     "description": "Minimum depth threshold for a position to be included in the filtered file of detected variants."
+                },
+                "alt_ratio_threshold_variant": {
+                    "type": "number",
+                    "default": 0.02,
+                    "description": "Ratio threshold of alternate allele representation about which the position can be included in the filtered file of detected variants.  Note: an SNV will only be considered as passing the filters if it validates all the criteria (e.g. with parameters set to 'alt_ratio_threshold_variant=0.01' and 'ref_ratio_threshold_variant=0.95' a position that would have, for example, 'REF_FREQ=0.94' with 10 alternative alleles of the same frequency (< 0.01) would not pass the filters). It is recommended to at least set this threshold a little higher than the probability of error (obtained with 'samtools stats' or estimated according to the average QScore of the bases/reads (for example double of probability corresponding to the average QScore, which gives '0.002' for Q30)."
                 },
                 "ref_ratio_threshold_variant": {
                     "type": "number",
                     "default": 0.9,
-                    "description": "Ratio threshold of reference allele representation below which the position can be included in the filtered file of detected variants."
+                    "description": "Ratio threshold of reference allele representation below which the position can be included in the filtered file of detected variants. Note: actually used only with 'ivar' variant caller (not with 'sav_call')"
                 },
-                "alt_ratio_threshold_variant": {
-                    "type": "number",
-                    "default": 0.002,
-                    "description": "Ratio threshold of alternate allele representation about which the position can be included in the filtered file of detected variants.  Note: an SNV will only be considered as passing the filters if it validates all the criteria (e.g. with parameters set to 'alt_ratio_threshold_variant=0.01' and 'ref_ratio_threshold_variant=0.95' a position that would have, for example, 'REF_FREQ=0.94' with 10 alternative alleles of the same frequency (< 0.01) would not pass the filters). It is recommended to at least set this threshold a little higher than the probability of error (obtained with 'samtools stats' or estimated according to the average QScore of the bases/reads (for example double of probability corresponding to the average QScore, which gives '0.002' for Q30)."
+                "args_samtools_mpileup_variant": {
+                    "type": "string",
+                    "default": "",
+                    "description": "'samtools mpileup' args for variant calling. Options already included and cannot be amended '-aa -A -B -Q 0 -d <max_n_pileup>'. Note: used only with 'ivar' variant caller (not with 'sav_call')"
                 }
             }
         },

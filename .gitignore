@@ -12,3 +12,4 @@ raw.txt
 /data/test/build_custom_db.sh
 /data/test/k2*
 /data/test/test_local.yml
+/null/
