@@ -90,14 +90,24 @@ workflow {
   VIRAL_VARIANT(inReads, inRef, inAnnot, params.mapper)
   
   publish:
-  VIRAL_VARIANT.out.sav_call_snv >> 'sav_call/snv'
-  VIRAL_VARIANT.out.sav_call_snv_rev >> 'sav_call/details'
-  VIRAL_VARIANT.out.sav_call_snv_fwd >> 'sav_call/details'
-  VIRAL_VARIANT.out.sav_call_snv_indel >> 'sav_call/details'
-  VIRAL_VARIANT.out.sav_call_snv_base >> 'sav_call/details'
+  VIRAL_VARIANT.out.called_snv >> 'sav_call_per_sample/snv'
+  VIRAL_VARIANT.out.called_snv_rev >> 'sav_call_per_sample/snv_rev'
+  VIRAL_VARIANT.out.called_snv_fwd >> 'sav_call_per_sample/snv_fwd'
+  VIRAL_VARIANT.out.called_indel >> 'sav_call_per_sample/indel'
+  VIRAL_VARIANT.out.sav_base >> 'sav_call_per_sample/details'
+
+  VIRAL_VARIANT.out.variants >> 'variants_per_batch'
+  VIRAL_VARIANT.out.vcf >> 'variants_per_batch'
+  VIRAL_VARIANT.out.proteins >> 'variants_per_batch'
+
   VIRAL_VARIANT.out.transfered_gff >> 'transfered_annot'
-  VIRAL_VARIANT.out.psa_algn >> 'transfered_annot'
+  VIRAL_VARIANT.out.psa_align >> 'transfered_annot'
   VIRAL_VARIANT.out.flagstat >> 'mapping/flagstat'
-  VIRAL_VARIANT.out.aln_bam >> 'mapping'
+  VIRAL_VARIANT.out.alignedBam >> 'mapping'
+
+
 }
 
+output {
+
+}
