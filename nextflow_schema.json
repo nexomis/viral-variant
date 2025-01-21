@@ -159,20 +159,51 @@
                     "default": "--local",
                     "description": "Bowtie2 mapping args. Ignored if 'mapper' is not 'bowtie2'."
                 },
-                "max_n_pileup": {
+                "max_n_pileup_variant": {
                     "type": "integer",
                     "default": 1000000,
-                    "description": "Maximum reads in pileup."
+                    "description": "Maximum reads in pileup for variant calling."
                 },
                 "min_dp_variant": {
                     "type": "integer",
                     "default": 20,
                     "description": "Minimum depth threshold for a position to be included in the filtered file of detected variants."
                 },
-                "alt_ratio_threshold_variant": {
+                "min_freq_snv": {
                     "type": "number",
                     "default": 0.02,
-                    "description": "Ratio threshold of alternate allele representation about which the position can be included in the filtered file of detected variants.  Note: an SNV will only be considered as passing the filters if it validates all the criteria (e.g. with parameters set to 'alt_ratio_threshold_variant=0.01' and 'ref_ratio_threshold_variant=0.95' a position that would have, for example, 'REF_FREQ=0.94' with 10 alternative alleles of the same frequency (< 0.01) would not pass the filters). It is recommended to at least set this threshold a little higher than the probability of error (obtained with 'samtools stats' or estimated according to the average QScore of the bases/reads (for example double of probability corresponding to the average QScore, which gives '0.002' for Q30)."
+                    "description": "Ratio threshold of alternate allele representation about which the position can be included in the filtered file of detected variants.  Note: an SNV will only be considered as passing the filters if it validates all the criteria (e.g. with parameters set to 'min_freq_snv=0.01' and 'ref_ratio_threshold_variant=0.95' a position that would have, for example, 'REF_FREQ=0.94' with 10 alternative alleles of the same frequency (< 0.01) would not pass the filters). It is recommended to at least set this threshold a little higher than the probability of error (obtained with 'samtools stats' or estimated according to the average QScore of the bases/reads (for example double of probability corresponding to the average QScore, which gives '0.002' for Q30)."
+                },
+                "R1_strand": {
+                    "type": "string",
+                    "default": "forward",
+                    "choices": ["forward", "reverse"],
+                    "description": "Strand orientation for R1 reads"
+                },
+                "R2_strand": {
+                    "type": "string",
+                    "default": "reverse",
+                    "choices": ["forward", "reverse"],
+                    "description": "Strand orientation for R2 reads"
+                },
+                "min_alt_count_variant": {
+                    "type": "integer",
+                    "default": 2,
+                    "description": "Minimum number of counts to consider an alternative base for calling"
+                },
+                "min_freq_indel": {
+                    "type": "number",
+                    "default": 0.03,
+                    "description": "Minimum frequency to call an indel"
+                },
+                "flank_n_variant": {
+                    "type": "integer",
+                    "default": 999,
+                    "description": "Number of flanking bases to extract at the end of CDS in case of stop codon loss or frameshift"
+                },
+                "gff_prot_attr": {
+                    "type": "string",
+                    "description": "Attribute with protein name in the GFF"
                 }
             }
         },
