@@ -1,0 +1,5 @@
+input: data/test/samplesheets.csv
+refs: data/test/refs.csv
+mem_high: 30
+out_dir: data/test/out_dir
+skip_primary: true

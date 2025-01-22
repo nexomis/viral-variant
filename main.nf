@@ -61,6 +61,15 @@ workflow {
   }
   | set { parsedInputs }
 
+  // Define primary output channels
+  Channel.empty() | set { primary_trimmed }
+  Channel.empty() | set { primary_fastqc_trim_html }
+  Channel.empty() | set { primary_fastqc_raw_html }
+  Channel.empty() | set { primary_multiqc_html }
+  Channel.empty() | set { primary_kraken2_report }
+  Channel.empty() | set { primary_kraken2_output }
+  Channel.empty() | set { primary_class_report }
+
   if (params.skip_primary) {
     inReads = parsedInputs
   } else {
@@ -78,8 +87,14 @@ workflow {
     numReads = Channel.value(params.num_reads_sample_qc)
     
     PRIMARY(parsedInputs, dbPathKraken2, taxDir, numReads)
-    PRIMARY.out.trimmed
-    | set { inReads }
+    PRIMARY.out.trimmed | set { inReads }
+    PRIMARY.out.trimmed | set { primary_trimmed }
+    PRIMARY.out.fastqc_trim_html | set { primary_fastqc_trim_html }
+    PRIMARY.out.fastqc_raw_html | set { primary_fastqc_raw_html }
+    PRIMARY.out.multiqc_html | set { primary_multiqc_html }
+    PRIMARY.out.kraken2_report | set { primary_kraken2_report }
+    PRIMARY.out.kraken2_output | set { primary_kraken2_output }
+    PRIMARY.out.class_report | set { primary_class_report }
   }
 
   inputRefs = Channel.fromSamplesheet("refs")
@@ -91,13 +106,13 @@ workflow {
   
   publish:
 
-  PRIMARY.out.trimmed >> 'trimmed_and_filtered'
-  PRIMARY.out.fastqc_trim_html >> 'fastqc_for_trimmed'
-  PRIMARY.out.fastqc_raw_html >> 'fastqc_for_raw'
-  PRIMARY.out.multiqc_html >> 'multiqc'
-  PRIMARY.out.kraken2_report >> 'classification'
-  PRIMARY.out.kraken2_output >> 'classification'
-  PRIMARY.out.class_report >> 'classification'
+  primary_trimmed >> 'trimmed_and_filtered'
+  primary_fastqc_trim_html >> 'fastqc_for_trimmed'
+  primary_fastqc_raw_html >> 'fastqc_for_raw'
+  primary_multiqc_html >> 'multiqc'
+  primary_kraken2_report >> 'classification'
+  primary_kraken2_output >> 'classification'
+  primary_class_report >> 'classification'
 
   VIRAL_VARIANT.out.called_snv >> 'sav_call_per_sample/snv'
   VIRAL_VARIANT.out.called_snv_rev >> 'sav_call_per_sample/snv_rev'
