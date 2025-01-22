@@ -27,7 +27,7 @@
                     "schema": "assets/refs_schema.json",
                     "description": "Path to comma-separated file containing information about the references to be used for each batch"
                 },
-                "save_fastp": {
+                "trimmed_and_filtered": {
                     "type": "boolean",
                     "description": "Save fastp trimmed fastq.",
                     "default": false
@@ -35,7 +35,7 @@
                 "save_bam_after_indel_realn": {
                     "type": "boolean",
                     "description": "Save mapping files after indels realignement.",
-                    "default": false
+                    "default": true
                 },
                 "out_dir": {
                     "type": "string",
@@ -43,11 +43,6 @@
                     "exists": false,
                     "description": "The output directory where the results will be saved (must not already exist).",
                     "default": "out_dir"
-                },
-                "publish_dir_mode": {
-                    "type": "string",
-                    "description": "PublishDir mode for process",
-                    "default": "link"
                 }
             }
         },
@@ -239,7 +234,7 @@
                 },
                 "mem_high": {
                     "type": "integer",
-                    "default": 120,
+                    "default": 60,
                     "description": "Memory for high process.."
                 },
                 "kraken2_memory": {

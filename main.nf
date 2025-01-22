@@ -90,6 +90,15 @@ workflow {
   VIRAL_VARIANT(inReads, inRef, inAnnot, params.mapper)
   
   publish:
+
+  PRIMARY.out.trimmed >> 'trimmed_and_filtered'
+  PRIMARY.out.fastqc_trim_html >> 'fastqc_for_trimmed'
+  PRIMARY.out.fastqc_raw_html >> 'fastqc_for_raw'
+  PRIMARY.out.multiqc_html >> 'multiqc'
+  PRIMARY.out.kraken2_report >> 'classification'
+  PRIMARY.out.kraken2_output >> 'classification'
+  PRIMARY.out.class_report >> 'classification'
+
   VIRAL_VARIANT.out.called_snv >> 'sav_call_per_sample/snv'
   VIRAL_VARIANT.out.called_snv_rev >> 'sav_call_per_sample/snv_rev'
   VIRAL_VARIANT.out.called_snv_fwd >> 'sav_call_per_sample/snv_fwd'
@@ -109,5 +118,10 @@ workflow {
 }
 
 output {
-
+    'trimmed_and_filtered' {
+        enabled = params.trimmed_and_filtered
+    }
+    'mapping' {
+        enabled = params.save_bam_after_indel_realn
+    }
 }
